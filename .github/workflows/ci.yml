@@ -30,6 +30,9 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
+      - name: Terraform Reset
+        run: terraform destroy
+
       - name: Terraform Apply
         run: terraform apply -auto-approve
         env:
