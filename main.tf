@@ -4,59 +4,55 @@ provider "aws" {
 }
 
 # Create an S3 bucket for hosting the website
-# resource "aws_s3_bucket" "memoo" {
-#   bucket = "memoo-app-dev"
-# }
-
-# resource "aws_s3_bucket_website_configuration" "memoo" {
-#   bucket = aws_s3_bucket.memoo.id
-
-#   index_document {
-#     suffix = "index.html"
-#   }
-
-#   error_document {
-#     key = "error.html"
-#   }
-
-#   routing_rule {
-#     condition {
-#       key_prefix_equals = "docs/"
-#     }
-#     redirect {
-#       replace_key_prefix_with = "documents/"
-#     }
-#   }
-# }
-
-# resource "aws_s3_bucket_ownership_controls" "memoo" {
-#   bucket = aws_s3_bucket.memoo.id
-#   rule {
-#     object_ownership = "BucketOwnerPreferred"
-#   }
-# }
-
-# resource "aws_s3_bucket_public_access_block" "memoo" {
-#   bucket = aws_s3_bucket.memoo.id
-
-#   block_public_acls       = false
-#   block_public_policy     = false
-#   ignore_public_acls      = false
-#   restrict_public_buckets = false
-# }
-
-# resource "aws_s3_bucket_acl" "memoo" {
-#   depends_on = [
-#     aws_s3_bucket_ownership_controls.memoo,
-#     aws_s3_bucket_public_access_block.memoo,
-#   ]
-
-#   bucket = aws_s3_bucket.memoo.id
-#   acl    = "public-read"
-# }
-
-data "aws_s3_bucket" "memoo" {
+resource "aws_s3_bucket" "memoo" {
   bucket = "memoo-app-dev"
+}
+
+resource "aws_s3_bucket_website_configuration" "memoo" {
+  bucket = aws_s3_bucket.memoo.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
+  }
+
+  routing_rule {
+    condition {
+      key_prefix_equals = "docs/"
+    }
+    redirect {
+      replace_key_prefix_with = "documents/"
+    }
+  }
+}
+
+resource "aws_s3_bucket_ownership_controls" "memoo" {
+  bucket = aws_s3_bucket.memoo.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "memoo" {
+  bucket = aws_s3_bucket.memoo.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
+resource "aws_s3_bucket_acl" "memoo" {
+  depends_on = [
+    aws_s3_bucket_ownership_controls.memoo,
+    aws_s3_bucket_public_access_block.memoo,
+  ]
+
+  bucket = aws_s3_bucket.memoo.id
+  acl    = "public-read"
 }
 
 # Create a CloudFront distribution for the memoo
