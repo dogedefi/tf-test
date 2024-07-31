@@ -22,17 +22,25 @@ jobs:
         with:
           terraform_version: 1.4.6
 
-      - name: Terraform Cache
+      - uses: terraform-cache/terraform-cache@v1
+
+      - name: Restore terraform.tfstate
         uses: actions/cache@v2
         with:
-          path: |
-            ~/.terraform.d/plugins
-            **/.terraform.tfstate
-            **/.terraform.tfstate.lock.info
-            **/.terraform.lock.hcl
-          key: ${{ runner.os }}-terraform-${{ hashFiles('**/.terraform.lock.hcl') }}
-          restore-keys: |
-            ${{ runner.os }}-terraform-
+          path: ./.terraform.tfstate
+          key: ${{ runner.os }}-terraform-tfstate
+
+      - name: Restore terraform.tfstate.lock.info
+        uses: actions/cache@v2
+        with:
+          path: ./.terraform.tfstate.lock.info
+          key: ${{ runner.os }}-terraform-tfstate-lock-info
+
+      - name: Restore terraform.lock.hcl
+        uses: actions/cache@v2
+        with:
+          path: ./.terraform.lock.hcl
+          key: ${{ runner.os }}-terraform-lock-hcl
 
       - name: Terraform Init
         run: terraform init
