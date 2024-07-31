@@ -4,12 +4,8 @@ provider "aws" {
 }
 
 # Create an S3 bucket for hosting the website
-data "aws_s3_bucket" "memoo" {
-  bucket = "memoo-app-dev"
-}
 resource "aws_s3_bucket" "memoo" {
   bucket = "memoo-app-dev"
-  count  = data.aws_s3_bucket.memoo.id == "" ? 1 : 0
 }
 
 resource "aws_s3_bucket_website_configuration" "memoo" {
