@@ -27,26 +27,12 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      - name: Restore terraform.tfstate
-        uses: actions/cache@v2
-        with:
-          path: ./.terraform.tfstate
-          key: ${{ runner.os }}-terraform-tfstate-${{ hashFiles('**/.terraform.tfstate') }}
-
-      - name: Restore terraform.tfstate.lock.info
-        uses: actions/cache@v2
-        with:
-          path: ./.terraform.tfstate.lock.info
-          key: ${{ runner.os }}-terraform-tfstate-lock-info-${{ hashFiles('**/.terraform.tfstate.lock.info') }}
-
-      - name: Restore terraform.lock.hcl
-        uses: actions/cache@v2
-        with:
-          path: ./.terraform.lock.hcl
-          key: ${{ runner.os }}-terraform-lock-hcl-${{ hashFiles('**/.terraform.lock.hcl') }}
-
       - name: Terraform Validate
         run: terraform validate
+
+      - name: Terraform Reset
+        run: |
+          terraform destroy -force
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
