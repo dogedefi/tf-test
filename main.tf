@@ -5,7 +5,28 @@ provider "aws" {
 
 # Create an S3 bucket for hosting the website
 resource "aws_s3_bucket" "memoo" {
-  bucket = "memoo-app-prod"
+  bucket = "memoo-app-dev"
+}
+
+resource "aws_s3_bucket_website_configuration" "memoo" {
+  bucket = aws_s3_bucket.memoo.id
+
+  index_document {
+    suffix = "index.html"
+  }
+
+  error_document {
+    key = "error.html"
+  }
+
+  routing_rule {
+    condition {
+      # key_prefix_equals = "docs/"
+    }
+    redirect {
+      # replace_key_prefix_with = "documents/"
+    }
+  }
 }
 
 resource "aws_s3_bucket_ownership_controls" "memoo" {
