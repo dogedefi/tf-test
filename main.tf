@@ -4,12 +4,12 @@ provider "aws" {
 }
 
 # Create an S3 bucket for hosting the website
+data "aws_s3_bucket" "memoo" {
+  bucket = "memoo-app-dev"
+}
 resource "aws_s3_bucket" "memoo" {
   bucket = "memoo-app-dev"
-
-  lifecycle {
-    create_before_destroy = true
-  }
+  count  = data.aws_s3_bucket.memoo.id == "" ? 1 : 0
 }
 
 resource "aws_s3_bucket_website_configuration" "memoo" {
@@ -31,20 +31,12 @@ resource "aws_s3_bucket_website_configuration" "memoo" {
       replace_key_prefix_with = "documents/"
     }
   }
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_s3_bucket_ownership_controls" "memoo" {
   bucket = aws_s3_bucket.memoo.id
   rule {
     object_ownership = "BucketOwnerPreferred"
-  }
-
-  lifecycle {
-    create_before_destroy = true
   }
 }
 
@@ -55,10 +47,6 @@ resource "aws_s3_bucket_public_access_block" "memoo" {
   block_public_policy     = false
   ignore_public_acls      = false
   restrict_public_buckets = false
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_s3_bucket_acl" "memoo" {
@@ -69,10 +57,6 @@ resource "aws_s3_bucket_acl" "memoo" {
 
   bucket = aws_s3_bucket.memoo.id
   acl    = "public-read"
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 # # Create a CloudFront distribution for the website
