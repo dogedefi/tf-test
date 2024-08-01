@@ -1,10 +1,10 @@
-name: Terraform
+name: CI
 
 on:
   workflow_dispatch:
     inputs:
     environment:
-      description: "Test for Terraform"
+      description: "Manual deployment"
       required: true
       default: "staging"
 
@@ -16,25 +16,3 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.4.6
-
-      - uses: terraform-cache/terraform-cache@v1
-
-      - name: Terraform Init
-        run: terraform init
-
-      - name: Terraform Validate
-        run: terraform validate
-
-      - name: Terraform Reset
-        run: terraform destroy
-
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
