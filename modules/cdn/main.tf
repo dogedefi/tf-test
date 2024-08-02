@@ -41,7 +41,7 @@ resource "aws_cloudfront_distribution" "memoo_app_dev_distribution" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = "arn:aws:acm:ap-southeast-2:767397808373:certificate/62044f6c-cce2-4af2-9f1a-54c78034bc5a"
+    acm_certificate_arn = "arn:aws:acm:us-east-1:767397808373:certificate/ef520095-8951-4c7f-9ad9-5821e391bb63"
     ssl_support_method  = "sni-only"
   }
 }
