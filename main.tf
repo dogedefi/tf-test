@@ -4,5 +4,8 @@ module "s3" {
 }
 
 # Create a CloudFront distribution for the memoo
+module "cdn" {
+  source = "./modules/cdn"
+}
 
 # Create a Route 53 record for the website
